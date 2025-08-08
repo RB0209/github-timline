@@ -3,155 +3,62 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Timeline 2011–2025 — Disney+ Style Portrait Tiles</title>
+<title>Timeline 2011–2025 — Responsive Disney+ Style</title>
 <style>
-  :root { --brand: #38b6ff; --bg:#ffffff; --muted:#f7f8f9; }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background: var(--bg);
-    color: #111;
-    -webkit-font-smoothing:antialiased;
-  }
+  :root{ --brand:#38b6ff; --bg:#ffffff; --muted:#f7f8fa; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family: "Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#111}
 
-  /* Year selector (wraps — no horizontal scroll) */
-  .year-wrap {
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    justify-content:center;
-    padding:18px 16px;
-    background: var(--muted);
-    border-bottom: 2px solid var(--brand);
-  }
-  .year-btn {
-    background: #fff;
-    border: 2px solid var(--brand);
-    color: var(--brand);
-    padding: 10px 18px;
-    border-radius: 28px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease, background .18s;
-  }
-  .year-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56,182,255,0.12); }
-  .year-btn.active {
-    background: var(--brand);
-    color: #fff;
-    box-shadow: 0 10px 28px rgba(56,182,255,0.22);
-  }
+  /* YEAR BUTTONS (wrap, no horizontal scroll) */
+  .year-wrap{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:16px;background:var(--muted);border-bottom:2px solid var(--brand)}
+  .year-btn{background:#fff;border:2px solid var(--brand);color:var(--brand);padding:10px 16px;border-radius:28px;font-weight:700;cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s}
+  .year-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(56,182,255,0.12)}
+  .year-btn.active{background:var(--brand);color:#fff;box-shadow:0 10px 28px rgba(56,182,255,0.22)}
 
-  /* Tiles grid */
-  .tiles {
-    max-width: 1200px;
-    margin: 24px auto;
-    padding: 0 18px 48px;
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    align-items: start;
-  }
+  /* TILES GRID */
+  .tiles-wrap{max-width:1200px;margin:22px auto;padding:0 16px 48px}
+  .tiles{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));align-items:start;transition:opacity .45s ease}
 
-  /* Portrait tile (Disney+ like) */
-  .tile {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
-    transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
-    display:flex;
-    flex-direction:column;
-    height: 320px; /* portrait feel */
-  }
-  .tile:hover {
-    transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 22px 40px rgba(56,182,255,0.18);
-  }
-  .tile-poster {
-    width:100%;
-    height: 76%;
-    object-fit: cover;
-    display:block;
-    background: #eee;
-  }
-  /* subtle gradient at bottom of poster to make title readable if overlayed */
-  .tile-meta {
-    padding: 10px 12px;
-    height: 24%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .tile-title {
-    color: var(--brand);
-    font-weight:700;
-    font-size: 13px;
-    text-align:center;
-    line-height:1.18;
-  }
+  /* PORTRAIT TILE */
+  .tile{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 6px 12px rgba(0,0,0,0.06);transition:transform .28s cubic-bezier(.2,.9,.2,1),box-shadow .28s;display:flex;flex-direction:column;height:320px}
+  .tile:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 22px 40px rgba(56,182,255,0.18)}
+  .tile-poster{width:100%;height:76%;object-fit:cover;background:#e9eef6;display:block}
+  .tile-meta{padding:10px 12px;height:24%;display:flex;align-items:center;justify-content:center}
+  .tile-title{color:var(--brand);font-weight:700;font-size:13px;text-align:center;line-height:1.2}
 
-  /* Popup modal */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.65);
-    z-index: 1000;
-  }
-  .overlay.show { display:flex; }
-  .modal {
-    width: 92%;
-    max-width: 680px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-    position: relative;
-    text-align:center;
-  }
-  .modal img { width: 100%; height: auto; border-radius: 8px; margin-bottom:12px; }
-  .modal h3 { margin: 8px 0 6px; color: var(--brand); }
-  .close {
-    position: absolute;
-    right: 12px;
-    top: 10px;
-    background: var(--brand);
-    color: #fff;
-    border: none;
-    width:36px;
-    height:36px;
-    border-radius: 50%;
-    font-size: 18px;
-    cursor:pointer;
-  }
+  /* FADE STATES */
+  .fade-out{opacity:0;pointer-events:none}
+  .fade-in{opacity:1}
 
-  /* responsive tweaks */
-  @media (max-width:560px) {
-    .tile { height: 300px; }
-    .tile-title { font-size:12px; }
-    .year-btn { padding: 8px 14px; }
-  }
+  /* POPUP / MODAL */
+  .popup-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.65);z-index:1200}
+  .popup-overlay.show{display:flex}
+  .popup-card{width:92%;max-width:700px;background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,0.35);position:relative;text-align:center}
+  .popup-card img{max-width:100%;height:auto;border-radius:8px;margin-bottom:12px}
+  .popup-card h3{margin:8px 0 6px;color:var(--brand)}
+  .popup-close{position:absolute;right:12px;top:10px;background:var(--brand);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+
+  /* small screens */
+  @media (max-width:560px){.tile{height:300px}.tile-poster{height:72%}.year-btn{padding:8px 12px;font-size:14px}}
 </style>
 </head>
 <body>
 
-  <!-- Year buttons (wrap, no scroll) -->
-  <div class="year-wrap" id="yearWrap"></div>
+  <!-- Year buttons (wrap to multiple rows; no horizontal scroll) -->
+  <div class="year-wrap" id="yearWrap" aria-label="Year selector"></div>
 
-  <!-- Tiles -->
-  <div class="tiles" id="tiles"></div>
+  <!-- Tiles container -->
+  <div class="tiles-wrap">
+    <main class="tiles fade-in" id="tiles" role="list"></main>
+  </div>
 
-  <!-- Popup -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="close" id="closeBtn" aria-label="Close">×</button>
-      <img id="modal-img" src="" alt="">
-      <h3 id="modal-title"></h3>
-      <p id="modal-desc"></p>
+  <!-- Popup overlay (click outside to close) -->
+  <div class="popup-overlay" id="popupOverlay" aria-hidden="true">
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <button class="popup-close" id="popupClose" aria-label="Close">×</button>
+      <img id="popupImage" src="" alt="popup image" />
+      <h3 id="popupTitle"></h3>
+      <p id="popupDesc"></p>
     </div>
   </div>
 
@@ -159,173 +66,210 @@
 /* === Data: original event titles & image filenames (YEAR-INDEX.jpg) === */
 const timeline = {
   2011: [
-    { title: "Social Awareness through Local Public Events and Programs during Festivals", img: "2011-1.jpg", desc:
-      "Founded in 2011 in the slums of Khar East, Mumbai, CARE FOUNDATION began its journey as a youth-led initiative driven by purpose and passion. The young team started with small awareness drives and impactful programs during festivals and public functions, aiming to spread positivity and social consciousness in their community. Through these early efforts, they inspired change, empowered residents, and laid the foundation for a brighter, more hopeful future — one slum, one story, one smile at a time."
+    { title: "Social Awareness through Local Public Events and Programs during Festivals",
+      img: "2011-1.jpg",
+      desc: "Founded in 2011 in the slums of Khar East, Mumbai, CARE FOUNDATION began its journey as a youth-led initiative driven by purpose and passion. The young team started with small awareness drives and impactful programs during festivals and public functions, aiming to spread positivity and social consciousness in their community. Through these early efforts, they inspired change, empowered residents, and laid the foundation for a brighter, more hopeful future — one slum, one story, one smile at a time."
     }
   ],
   2012: [
-    { title: "National Flag Pride Rally", img: "2012-1.jpg", desc:"" },
-    { title: "Socio-cultural program for youth motivation", img: "2012-2.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2012-1.jpg", desc: "" },
+    { title: "Socio-cultural program for youth motivation", img: "2012-2.jpg", desc: "" }
   ],
   2013: [
-    { title: "National Flag Pride Rally", img: "2013-1.jpg", desc:"" },
-    { title: "Socio-cultural program for youth motivation", img: "2013-2.jpg", desc:"" },
-    { title: "Summer camps and winter camps", img: "2013-3.jpg", desc:"" },
-    { title: "Radio City 91.1 FM", img: "2013-4.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2013-1.jpg", desc: "" },
+    { title: "Socio-cultural program for youth motivation", img: "2013-2.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2013-3.jpg", desc: "" },
+    { title: "Radio City 91.1 FM", img: "2013-4.jpg", desc: "" }
   ],
   2014: [
-    { title: "National Flag Pride Rally", img: "2014-1.jpg", desc:"" },
-    { title: "Summer camps and winter camps", img: "2014-2.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2014-1.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2014-2.jpg", desc: "" }
   ],
   2015: [
-    { title: "National Flag Pride Rally", img: "2015-1.jpg", desc:"" },
-    { title: "P3 Pre Primary", img: "2015-2.jpg", desc:"" },
-    { title: "Summer camps and winter camps", img: "2015-3.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2015-1.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2015-2.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2015-3.jpg", desc: "" }
   ],
   2016: [
-    { title: "National Flag Pride Rally", img: "2016-1.jpg", desc:"" },
-    { title: "P3 Pre Primary", img: "2016-2.jpg", desc:"" },
-    { title: "Youth motivation programs", img: "2016-3.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2016-1.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2016-2.jpg", desc: "" },
+    { title: "Youth motivation programs", img: "2016-3.jpg", desc: "" }
   ],
   2017: [
-    { title: "National Flag Pride Rally", img: "2017-1.jpg", desc:"" },
-    { title: "FANACT", img: "2017-2.jpg", desc:"" },
-    { title: "DANSEN", img: "2017-3.jpg", desc:"" },
-    { title: "P3 Pre Primary", img: "2017-4.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2017-1.jpg", desc: "" },
+    { title: "FANACT", img: "2017-2.jpg", desc: "" },
+    { title: "DANSEN", img: "2017-3.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2017-4.jpg", desc: "" }
   ],
   2018: [
-    { title: "National Flag Pride Rally", img: "2018-1.jpg", desc:"" },
-    { title: "FANACT", img: "2018-2.jpg", desc:"" },
-    { title: "Legal Awareness Seminar", img: "2018-3.jpg", desc:"" },
-    { title: "AABAA", img: "2018-4.jpg", desc:"" },
-    { title: "P3 Pre Primary", img: "2018-5.jpg", desc:"" },
-    { title: "Digi Womania Seminar", img: "2018-6.jpg", desc:"" },
-    { title: "Notebooks distribution", img: "2018-7.jpg", desc:"" },
-    { title: "Radio City 91.1 FM", img: "2018-8.jpg", desc:"" }
+    { title: "National Flag Pride Rally", img: "2018-1.jpg", desc: "" },
+    { title: "FANACT", img: "2018-2.jpg", desc: "" },
+    { title: "Legal Awareness Seminar", img: "2018-3.jpg", desc: "" },
+    { title: "AABAA", img: "2018-4.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2018-5.jpg", desc: "" },
+    { title: "Digi Womania Seminar", img: "2018-6.jpg", desc: "" },
+    { title: "Notebooks distribution", img: "2018-7.jpg", desc: "" },
+    { title: "Radio City 91.1 FM", img: "2018-8.jpg", desc: "" }
   ],
   2019: [
-    { title: "National Flag Pride Campaign", img: "2019-1.jpg", desc:"" },
-    { title: "Legal Awareness Seminars", img: "2019-2.jpg", desc:"" },
-    { title: "DIGI WOMANIA Seminar", img: "2019-3.jpg", desc:"" },
-    { title: "P3 Pre Primary", img: "2019-4.jpg", desc:"" },
-    { title: "Kerala flood donation", img: "2019-5.jpg", desc:"" },
-    { title: "Medical camp", img: "2019-6.jpg", desc:"" }
+    { title: "National Flag Pride Campaign", img: "2019-1.jpg", desc: "" },
+    { title: "Legal Awareness Seminars", img: "2019-2.jpg", desc: "" },
+    { title: "DIGI WOMANIA Seminar", img: "2019-3.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2019-4.jpg", desc: "" },
+    { title: "Kerala flood donation", img: "2019-5.jpg", desc: "" },
+    { title: "Medical camp", img: "2019-6.jpg", desc: "" }
   ],
   2020: [
-    { title: "National Flag Pride Campaign", img: "2020-1.jpg", desc:"" },
-    { title: "Food, Water, Mask & Sanitizer Distribution", img: "2020-2.jpg", desc:"" },
-    { title: "Medical camp", img: "2020-3.jpg", desc:"" },
-    { title: "Sanitary pad distribution", img: "2020-4.jpg", desc:"" }
+    { title: "National Flag Pride Campaign", img: "2020-1.jpg", desc: "" },
+    { title: "Food, Water, Mask & Sanitizer Distribution", img: "2020-2.jpg", desc: "" },
+    { title: "Medical camp", img: "2020-3.jpg", desc: "" },
+    { title: "Sanitary pad distribution", img: "2020-4.jpg", desc: "" }
   ],
   2021: [
-    { title: "National Flag Pride Campaign", img: "2021-1.jpg", desc:"" },
-    { title: "Food & Water Distribution, Masks, Sanitizers", img: "2021-2.jpg", desc:"" },
-    { title: "Medical Aid under Project ASHA", img: "2021-3.jpg", desc:"" },
-    { title: "Juhu beach cleaning", img: "2021-4.jpg", desc:"" }
+    { title: "National Flag Pride Campaign", img: "2021-1.jpg", desc: "" },
+    { title: "Food & Water Distribution, Masks, Sanitizers", img: "2021-2.jpg", desc: "" },
+    { title: "Medical Aid under Project ASHA", img: "2021-3.jpg", desc: "" },
+    { title: "Juhu beach cleaning", img: "2021-4.jpg", desc: "" }
   ],
   2022: [
-    { title: "National Flag Pride Campaign", img: "2022-1.jpg", desc:"" },
-    { title: "Food & Water Distribution", img: "2022-2.jpg", desc:"" },
-    { title: "Masks, Sanitizers, Stationary Kit Distribution", img: "2022-3.jpg", desc:"" },
-    { title: "Sanitary pad distribution", img: "2022-4.jpg", desc:"" }
+    { title: "National Flag Pride Campaign", img: "2022-1.jpg", desc: "" },
+    { title: "Food & Water Distribution", img: "2022-2.jpg", desc: "" },
+    { title: "Masks, Sanitizers, Stationary Kit Distribution", img: "2022-3.jpg", desc: "" },
+    { title: "Sanitary pad distribution", img: "2022-4.jpg", desc: "" }
   ],
   2023: [
-    { title: "Project ASHA", img: "2023-1.jpg", desc:"" },
-    { title: "Feed The Need", img: "2023-2.jpg", desc:"" },
-    { title: "Stationary kit distribution", img: "2023-3.jpg", desc:"" }
+    { title: "Project ASHA", img: "2023-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2023-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2023-3.jpg", desc: "" }
   ],
   2024: [
-    { title: "Project ASHA", img: "2024-1.jpg", desc:"" },
-    { title: "Feed The Need", img: "2024-2.jpg", desc:"" },
-    { title: "Stationary kit distribution", img: "2024-3.jpg", desc:"" },
-    { title: "Food distribution", img: "2024-4.jpg", desc:"" }
+    { title: "Project ASHA", img: "2024-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2024-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2024-3.jpg", desc: "" },
+    { title: "Food distribution", img: "2024-4.jpg", desc: "" }
   ],
   2025: [
-    { title: "Project ASHA", img: "2025-1.jpg", desc:"" },
-    { title: "Feed The Need", img: "2025-2.jpg", desc:"" },
-    { title: "Stationary kit distribution", img: "2025-3.jpg", desc:"" },
-    { title: "Food distribution", img: "2025-4.jpg", desc:"" }
+    { title: "Project ASHA", img: "2025-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2025-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2025-3.jpg", desc: "" },
+    { title: "Food distribution", img: "2025-4.jpg", desc: "" }
   ]
 };
 
-/* Render year buttons (wrap) */
+/* Helpers & DOM refs */
 const yearWrap = document.getElementById('yearWrap');
-Object.keys(timeline).forEach((y, idx) => {
+const tilesEl = document.getElementById('tiles');
+const overlay = document.getElementById('popupOverlay');
+const popupImg = document.getElementById('popupImage');
+const popupTitle = document.getElementById('popupTitle');
+const popupDesc = document.getElementById('popupDesc');
+const popupClose = document.getElementById('popupClose');
+
+/* Render year buttons dynamically from data (keeps things in sync) */
+const years = Object.keys(timeline);
+years.forEach((y) => {
   const btn = document.createElement('button');
   btn.className = 'year-btn';
+  btn.type = 'button';
   btn.textContent = y;
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderTiles(y);
-  });
+  btn.addEventListener('click', () => { selectYear(y); });
   yearWrap.appendChild(btn);
 });
-/* Active-first */
-const firstYear = Object.keys(timeline)[0];
-document.querySelectorAll('.year-btn')[0].classList.add('active');
 
-/* Render tiles */
-const tilesEl = document.getElementById('tiles');
+/* Select year - renders tiles and updates active state */
+function selectYear(year) {
+  // update active button
+  document.querySelectorAll('.year-btn').forEach(b => { b.classList.toggle('active', b.textContent === String(year)); });
+  renderTiles(year);
+  // keep autoIndex in sync
+  if (typeof window._autoIndex !== 'undefined') {
+    window._autoIndex = years.indexOf(String(year));
+  }
+}
+
+/* Render tiles for a year (with fade-out -> update -> fade-in transitions) */
+let fadeTimeout = 220; // ms (shorter than CSS .45s to look smooth)
 function renderTiles(year) {
-  tilesEl.innerHTML = '';
-  const items = timeline[year] || [];
-  items.forEach((it, i) => {
-    const tile = document.createElement('div');
-    tile.className = 'tile';
-    // poster
-    const img = document.createElement('img');
-    img.className = 'tile-poster';
-    img.src = it.img;
-    img.alt = it.title;
-    img.onerror = () => { img.src = 'https://via.placeholder.com/300x450?text=No+Image'; };
-    // meta/title area
-    const meta = document.createElement('div');
-    meta.className = 'tile-meta';
-    const title = document.createElement('div');
-    title.className = 'tile-title';
-    title.textContent = it.title;
-    meta.appendChild(title);
+  const current = tilesEl;
+  if (!current) return;
+  // fade out
+  current.classList.add('fade-out');
+  current.classList.remove('fade-in');
+  clearTimeout(current._fadeTimer);
+  current._fadeTimer = setTimeout(() => {
+    // update content after fade-out
+    current.innerHTML = '';
+    const items = timeline[year] || [];
+    items.forEach((it) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
 
-    tile.appendChild(img);
-    tile.appendChild(meta);
+      const img = document.createElement('img');
+      img.className = 'tile-poster';
+      img.src = it.img;
+      img.alt = it.title;
+      img.onerror = () => { img.src = 'https://via.placeholder.com/300x450?text=No+Image'; };
 
-    tile.addEventListener('click', () => openModal(it));
-    tilesEl.appendChild(tile);
-  });
+      const meta = document.createElement('div');
+      meta.className = 'tile-meta';
+      const title = document.createElement('div');
+      title.className = 'tile-title';
+      title.textContent = it.title;
+      meta.appendChild(title);
+
+      tile.appendChild(img);
+      tile.appendChild(meta);
+
+      tile.addEventListener('click', () => openPopup(it));
+
+      current.appendChild(tile);
+    });
+
+    // fade in
+    current.classList.remove('fade-out');
+    current.classList.add('fade-in');
+    // remove fade-in after transition (optional)
+    clearTimeout(current._removeIn);
+    current._removeIn = setTimeout(() => current.classList.remove('fade-in'), 500);
+  }, fadeTimeout);
 }
 
-/* Modal logic - open/close and click-outside to close */
-const overlay = document.getElementById('overlay');
-const modalImg = document.getElementById('modal-img');
-const modalTitle = document.getElementById('modal-title');
-const modalDesc = document.getElementById('modal-desc');
-const closeBtn = document.getElementById('closeBtn');
-
-function openModal(item) {
-  modalImg.src = item.img;
-  modalImg.alt = item.title;
-  modalTitle.textContent = item.title;
-  modalDesc.textContent = item.desc || "";
+/* Popup open/close */
+function openPopup(item) {
+  popupImg.src = item.img;
+  popupImg.alt = item.title;
+  popupTitle.textContent = item.title;
+  popupDesc.textContent = item.desc || '';
   overlay.classList.add('show');
-  overlay.setAttribute('aria-hidden','false');
-  document.addEventListener('keydown', escHandler);
+  overlay.setAttribute('aria-hidden', 'false');
+  document.addEventListener('keydown', onKeyDown);
 }
-/* Close handler */
-function closeModal() {
+function closePopup() {
   overlay.classList.remove('show');
-  overlay.setAttribute('aria-hidden','true');
-  document.removeEventListener('keydown', escHandler);
+  overlay.setAttribute('aria-hidden', 'true');
+  document.removeEventListener('keydown', onKeyDown);
 }
-function escHandler(e) { if (e.key === 'Escape') closeModal(); }
-closeBtn.addEventListener('click', closeModal);
-/* Click outside modal to close */
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) closeModal();
-});
+function onKeyDown(e) { if (e.key === 'Escape') closePopup(); }
 
-/* Init default year */
-renderTiles(firstYear);
+/* click outside to close */
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
+popupClose.addEventListener('click', closePopup);
+
+/* Initialize default year */
+if (years.length > 0) {
+  selectYear(years[0]);
+}
+
+/* Auto-cycle years every 3s; safe if no years */
+(function startAutoCycle(){
+  if (years.length === 0) return;
+  window._autoIndex = years.indexOf(String(years[0]));
+  setInterval(() => {
+    window._autoIndex = (window._autoIndex + 1) % years.length;
+    const nextYear = years[window._autoIndex];
+    selectYear(nextYear);
+  }, 3000);
+})();
 </script>
 </body>
 </html>
