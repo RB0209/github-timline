@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Timeline — Disney+ Portrait Tiles</title>
+<style>
+  :root { --brand: #38b6ff; }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    margin: 0;
+    background: #fff;
+    color: #111;
+  }
+
+  /* Year buttons (wrap, no horizontal scroll) */
+  .year-buttons {
+    display: flex;
+    flex-wrap: wrap;       /* <-- wraps to next line (no scroll) */
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 20px;
+    background: #fafafa;
+    border-bottom: 2px solid var(--brand);
+  }
+  .year-button {
+    background: #ffffff;
+    border: 2px solid var(--brand);
+    color: var(--brand);
+    padding: 10px 18px;
+    border-radius: 28px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, background .22s;
+  }
+  .year-button:hover,
+  .year-button.active {
+    background: var(--brand);
+    color: white;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 6px 18px rgba(56,182,255,0.35);
+  }
+
+  /* Tiles grid */
+  .tiles {
+    display: grid;
+    gap: 20px;
+    padding: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  /* Portrait tile style */
+  .tile {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    transition: transform .28s ease, box-shadow .28s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .tile:hover {
+    transform: scale(1.06);
+    box-shadow: 0 18px 36px rgba(56,182,255,0.22);
+  }
+
+  .tile img {
+    width: 100%;
+    height: 300px;          /* portrait feel */
+    object-fit: cover;
+    display: block;
+    background: #eee;
+  }
+
+  .tile-title {
+    padding: 10px 12px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--brand);
+    text-align: center;
+    line-height: 1.25;
+    background: white;
+    flex: 0 0 auto;
+  }
+
+  /* Popup */
+  .popup {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+  }
+  .popup.show { display: flex; }
+  .popup-card {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 520px;
+    width: calc(100% - 40px);
+    padding: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    text-align: center;
+  }
+  .popup-card img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 12px; }
+  .popup-close {
+    margin-top: 12px;
+    background: var(--brand);
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  /* Small screens adjustments */
+  @media (max-width: 420px) {
+    .tile img { height: 260px; }
+    .year-button { padding: 8px 14px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="year-buttons" id="yearButtons"></div>
+  <div class="tiles" id="tiles"></div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-card" id="popupCard">
+      <img id="popupImg" src="" alt="" />
+      <h2 id="popupTitle"></h2>
+      <p id="popupDesc"></p>
+      <button class="popup-close" onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+<script>
+/*
+  FINAL timelineData:
+  - Displayed titles are exactly your original event titles.
+  - Images are referenced by filename (same folder as index.html) using a YEAR-INDEX naming scheme.
+  - If you prefer GitHub raw URLs instead, I can quickly swap img -> full URL.
+*/
+const timelineData = {
+  2011: [
+    { title: "Social Awareness through Local Public Events and Programs during Festivals",
+      img: "2011-1.jpg",
+      desc: "Founded in 2011 in the slums of Khar East, Mumbai, CARE FOUNDATION began its journey as a youth-led initiative driven by purpose and passion. The young team started with small awareness drives and impactful programs during festivals and public functions, aiming to spread positivity and social consciousness in their community. Through these early efforts, they inspired change, empowered residents, and laid the foundation for a brighter, more hopeful future — one slum, one story, one smile at a time."
+    }
+  ],
+  2012: [
+    { title: "National Flag Pride Rally", img: "2012-1.jpg", desc: "" },
+    { title: "Socio-cultural program for youth motivation", img: "2012-2.jpg", desc: "" }
+  ],
+  2013: [
+    { title: "National Flag Pride Rally", img: "2013-1.jpg", desc: "" },
+    { title: "Socio-cultural program for youth motivation", img: "2013-2.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2013-3.jpg", desc: "" },
+    { title: "Radio City 91.1 FM", img: "2013-4.jpg", desc: "" }
+  ],
+  2014: [
+    { title: "National Flag Pride Rally", img: "2014-1.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2014-2.jpg", desc: "" }
+  ],
+  2015: [
+    { title: "National Flag Pride Rally", img: "2015-1.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2015-2.jpg", desc: "" },
+    { title: "Summer camps and winter camps", img: "2015-3.jpg", desc: "" }
+  ],
+  2016: [
+    { title: "National Flag Pride Rally", img: "2016-1.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2016-2.jpg", desc: "" },
+    { title: "Youth motivation programs", img: "2016-3.jpg", desc: "" }
+  ],
+  2017: [
+    { title: "National Flag Pride Rally", img: "2017-1.jpg", desc: "" },
+    { title: "FANACT", img: "2017-2.jpg", desc: "" },
+    { title: "DANSEN", img: "2017-3.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2017-4.jpg", desc: "" }
+  ],
+  2018: [
+    { title: "National Flag Pride Rally", img: "2018-1.jpg", desc: "" },
+    { title: "FANACT", img: "2018-2.jpg", desc: "" },
+    { title: "Legal Awareness Seminar", img: "2018-3.jpg", desc: "" },
+    { title: "AABAA", img: "2018-4.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2018-5.jpg", desc: "" },
+    { title: "Digi Womania Seminar", img: "2018-6.jpg", desc: "" },
+    { title: "Notebooks distribution", img: "2018-7.jpg", desc: "" },
+    { title: "Radio City 91.1 FM", img: "2018-8.jpg", desc: "" }
+  ],
+  2019: [
+    { title: "National Flag Pride Campaign", img: "2019-1.jpg", desc: "" },
+    { title: "Legal Awareness Seminars", img: "2019-2.jpg", desc: "" },
+    { title: "DIGI WOMANIA Seminar", img: "2019-3.jpg", desc: "" },
+    { title: "P3 Pre Primary", img: "2019-4.jpg", desc: "" },
+    { title: "Kerala flood donation", img: "2019-5.jpg", desc: "" },
+    { title: "Medical camp", img: "2019-6.jpg", desc: "" }
+  ],
+  2020: [
+    { title: "National Flag Pride Campaign", img: "2020-1.jpg", desc: "" },
+    { title: "Food, Water, Mask & Sanitizer Distribution", img: "2020-2.jpg", desc: "" },
+    { title: "Medical camp", img: "2020-3.jpg", desc: "" },
+    { title: "Sanitary pad distribution", img: "2020-4.jpg", desc: "" }
+  ],
+  2021: [
+    { title: "National Flag Pride Campaign", img: "2021-1.jpg", desc: "" },
+    { title: "Food & Water Distribution, Masks, Sanitizers", img: "2021-2.jpg", desc: "" },
+    { title: "Medical Aid under Project ASHA", img: "2021-3.jpg", desc: "" },
+    { title: "Juhu beach cleaning", img: "2021-4.jpg", desc: "" }
+  ],
+  2022: [
+    { title: "National Flag Pride Campaign", img: "2022-1.jpg", desc: "" },
+    { title: "Food & Water Distribution", img: "2022-2.jpg", desc: "" },
+    { title: "Masks, Sanitizers, Stationary Kit Distribution", img: "2022-3.jpg", desc: "" },
+    { title: "Sanitary pad distribution", img: "2022-4.jpg", desc: "" }
+  ],
+  2023: [
+    { title: "Project ASHA", img: "2023-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2023-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2023-3.jpg", desc: "" }
+  ],
+  2024: [
+    { title: "Project ASHA", img: "2024-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2024-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2024-3.jpg", desc: "" },
+    { title: "Food distribution", img: "2024-4.jpg", desc: "" }
+  ],
+  2025: [
+    { title: "Project ASHA", img: "2025-1.jpg", desc: "" },
+    { title: "Feed The Need", img: "2025-2.jpg", desc: "" },
+    { title: "Stationary kit distribution", img: "2025-3.jpg", desc: "" },
+    { title: "Food distribution", img: "2025-4.jpg", desc: "" }
+  ]
+};
+
+/* render year buttons */
+const yearButtons = document.getElementById('yearButtons');
+const tiles = document.getElementById('tiles');
+
+Object.keys(timelineData).forEach((y, i) => {
+  const b = document.createElement('button');
+  b.className = 'year-button';
+  b.textContent = y;
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.year-button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    loadTiles(y);
+  });
+  yearButtons.appendChild(b);
+});
+
+/* activate first year by default */
+const firstYear = Object.keys(timelineData)[0];
+document.querySelectorAll('.year-button')[0].classList.add('active');
+loadTiles(firstYear);
+
+/* render tiles for a year */
+function loadTiles(year) {
+  tiles.innerHTML = '';
+  const items = timelineData[year] || [];
+  items.forEach((it, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tile';
+
+    // image uses local filename (same folder as index.html)
+    const img = document.createElement('img');
+    img.src = it.img; // e.g., "2013-2.jpg"
+    img.alt = it.title;
+
+    // fallback if image not found (optional)
+    img.onerror = () => { img.src = 'https://via.placeholder.com/300x450?text=No+Image'; };
+
+    const caption = document.createElement('div');
+    caption.className = 'tile-title';
+    caption.textContent = it.title; // ORIGINAL title shown here
+
+    div.appendChild(img);
+    div.appendChild(caption);
+
+    div.addEventListener('click', () => openPopup(it));
+    tiles.appendChild(div);
+  });
+}
+
+/* popup logic */
+const popup = document.getElementById('popup');
+const popupImg = document.getElementById('popupImg');
+const popupTitle = document.getElementById('popupTitle');
+const popupDesc = document.getElementById('popupDesc');
+
+function openPopup(item) {
+  popupImg.src = item.img; // local filename
+  popupImg.alt = item.title;
+  popupTitle.textContent = item.title;
+  popupDesc.textContent = item.desc || "";
+  popup.classList.add('show');
+}
+function closePopup() {
+  popup.classList.remove('show');
+}
+</script>
+</body>
+</html>
