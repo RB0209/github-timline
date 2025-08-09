@@ -250,21 +250,22 @@ const timeline = {
 
 /* Render year buttons (wrap) */
 const yearWrap = document.getElementById('yearWrap');
-const years = Object.keys(timeline);
-let yearButtons = [];
-years.forEach((y, idx) => {
+Object.keys(timeline).forEach((y, idx) => {
   const btn = document.createElement('button');
   btn.className = 'year-btn';
   btn.textContent = y;
   btn.addEventListener('click', () => {
-    selectYear(idx);
-    resetAutoplay();
+    document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTiles(y);
   });
   yearWrap.appendChild(btn);
-  yearButtons.push(btn);
 });
+/* Active-first */
+const firstYear = Object.keys(timeline)[0];
+document.querySelectorAll('.year-btn')[0].classList.add('active');
 
-/* Tiles rendering (unchanged design) */
+/* Render tiles */
 const tilesEl = document.getElementById('tiles');
 function renderTiles(year) {
   tilesEl.innerHTML = '';
@@ -323,32 +324,8 @@ overlay.addEventListener('click', (e) => {
   if (e.target === overlay) closeModal();
 });
 
-/* Year selection helper + autoplay */
-let currentYearIndex = 0;
-function selectYear(index) {
-  currentYearIndex = index;
-  // update active button
-  yearButtons.forEach((b, i) => b.classList.toggle('active', i === index));
-  // render tiles for that year
-  renderTiles(years[index]);
-}
-
 /* Init default year */
-selectYear(0);
-
-/* Autoplay: advance every 6 seconds, loop back to start; manual click resets timer */
-let autoplayTimer;
-function startAutoplay() {
-  autoplayTimer = setInterval(() => {
-    currentYearIndex = (currentYearIndex + 1) % years.length;
-    selectYear(currentYearIndex);
-  }, 6000);
-}
-function resetAutoplay() {
-  clearInterval(autoplayTimer);
-  startAutoplay();
-}
-startAutoplay();
+renderTiles(firstYear);
 </script>
 </body>
 </html>
