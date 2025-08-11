@@ -14,8 +14,6 @@
     color: #111;
     -webkit-font-smoothing:antialiased;
   }
-
-  /* Year selector (wraps — no horizontal scroll) */
   .year-wrap {
     display:flex;
     flex-wrap:wrap;
@@ -41,8 +39,6 @@
     color: #fff;
     box-shadow: 0 10px 28px rgba(56,182,255,0.22);
   }
-
-  /* Tiles grid */
   .tiles {
     max-width: 1200px;
     margin: 24px auto;
@@ -52,8 +48,6 @@
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     align-items: start;
   }
-
-  /* Portrait tile (Disney+ like) */
   .tile {
     background: #fff;
     border-radius: 12px;
@@ -63,7 +57,7 @@
     transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
     display:flex;
     flex-direction:column;
-    height: 320px; /* portrait feel */
+    height: 320px;
   }
   .tile:hover {
     transform: translateY(-6px) scale(1.03);
@@ -76,7 +70,6 @@
     display:block;
     background: #eee;
   }
-  /* subtle gradient at bottom of poster to make title readable if overlayed */
   .tile-meta {
     padding: 10px 12px;
     height: 24%;
@@ -91,8 +84,6 @@
     text-align:center;
     line-height:1.18;
   }
-
-  /* Popup modal */
   .overlay {
     position: fixed;
     inset: 0;
@@ -128,8 +119,6 @@
     font-size: 18px;
     cursor:pointer;
   }
-
-  /* responsive tweaks */
   @media (max-width:560px) {
     .tile { height: 300px; }
     .tile-title { font-size:12px; }
@@ -139,62 +128,66 @@
 </head>
 <body>
 
-  <!-- Year buttons (wrap, no scroll) -->
-  <div class="year-wrap" id="yearWrap"></div>
+<div class="year-wrap" id="yearWrap"></div>
+<div class="tiles" id="tiles"></div>
 
-  <!-- Tiles -->
-  <div class="tiles" id="tiles"></div>
-
-  <!-- Popup -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="close" id="closeBtn" aria-label="Close">×</button>
-      <img id="modal-img" src="" alt="">
-      <h3 id="modal-title"></h3>
-      <p id="modal-desc"></p>
-    </div>
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="close" id="closeBtn" aria-label="Close">×</button>
+    <img id="modal-img" src="" alt="">
+    <h3 id="modal-title"></h3>
+    <p id="modal-desc"></p>
   </div>
+</div>
 
 <script>
-/* === Data: original event titles & image filenames (YEAR-INDEX.jpg) === */
+const prideDesc = `The National Flag Pride Rally – A Movement of Patriotism by CARE FOUNDATION
+In 2012, CARE FOUNDATION launched a powerful and heartfelt initiative – The National Flag Pride Rally, conceptualized by Chairman Mr. Aniket Ghanshyam Bhankal. Born out of a deep sense of patriotism and responsibility, this unique movement aimed to uphold the dignity of our beloved Tiranga throughout the year, especially on days of national significance like 26th January and 15th August.
+The rally was more than just a march — it was a mission. Volunteers walked through various neighborhoods, raising awareness about the respectful handling of the Indian National Flag. They educated the public on how to hoist, de-hoist, and dispose of the flag with due honor. A key highlight of the rally was a street play that powerfully conveyed messages on civic pride and national respect, drawing attention and admiration from the community.
+A defining moment of the initiative was when volunteers actively picked up flags lying on the ground in disrespectful conditions, preserving them with the honor they deserve. The rally received an overwhelming response in its very first year, igniting a sense of national pride and civic duty among hundreds.
+The National Flag Pride Rally remains a shining example of how a small idea, rooted in respect and love for the nation, can spark a meaningful change in society.
+Official Inauguration of CARE FOUNDATION – A Celebration of Inspiration and Empowerment
+Held on 14th August, 2012
+CARE FOUNDATION marked its official inauguration on 14th August, 2012, under the visionary leadership of Dr. Aniket Ghanshyam Bhankal and the dedicated members of the organization. This landmark event wasn’t just a beginning — it was a powerful statement of purpose.`;
+
 const timeline = {
   2011: [
     { title: "Social Awareness through Local Public Events and Programs during Festivals", img: "2011-1.jpg", desc:
-      "Founded in 2011 in the slums of Khar East, Mumbai, CARE FOUNDATION began its journey as a youth-led initiative driven by purpose and passion. The young team started with small awareness drives and impactful programs during festivals and public functions, aiming to spread positivity and social consciousness in their community. Through these early efforts, they inspired change, empowered residents, and laid the foundation for a brighter, more hopeful future — one slum, one story, one smile at a time."
+      "Founded in 2011 in the slums of Khar East, Mumbai, CARE FOUNDATION began its journey as a youth-led initiative driven by purpose and passion..."
     }
   ],
   2012: [
-    { title: "National Flag Pride Rally", img: "2012-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2012-1.jpg", desc: prideDesc },
     { title: "Socio-cultural program for youth motivation", img: "2012-2.jpg", desc:"" }
   ],
   2013: [
-    { title: "National Flag Pride Rally", img: "2013-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2013-1.jpg", desc: prideDesc },
     { title: "Socio-cultural program for youth motivation", img: "2013-2.jpg", desc:"" },
     { title: "Summer camps and winter camps", img: "2013-3.jpg", desc:"" },
     { title: "Radio City 91.1 FM", img: "2013-4.jpg", desc:"" }
   ],
   2014: [
-    { title: "National Flag Pride Rally", img: "2014-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2014-1.jpg", desc: prideDesc },
     { title: "Summer camps and winter camps", img: "2014-2.jpg", desc:"" }
   ],
   2015: [
-    { title: "National Flag Pride Rally", img: "2015-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2015-1.jpg", desc: prideDesc },
     { title: "P3 Pre Primary", img: "2015-2.jpg", desc:"" },
     { title: "Summer camps and winter camps", img: "2015-3.jpg", desc:"" }
   ],
   2016: [
-    { title: "National Flag Pride Rally", img: "2016-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2016-1.jpg", desc: prideDesc },
     { title: "P3 Pre Primary", img: "2016-2.jpg", desc:"" },
     { title: "Youth motivation programs", img: "2016-3.jpg", desc:"" }
   ],
   2017: [
-    { title: "National Flag Pride Rally", img: "2017-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2017-1.jpg", desc: prideDesc },
     { title: "FANACT", img: "2017-2.jpg", desc:"" },
     { title: "DANSEN", img: "2017-3.jpg", desc:"" },
     { title: "P3 Pre Primary", img: "2017-4.jpg", desc:"" }
   ],
   2018: [
-    { title: "National Flag Pride Rally", img: "2018-1.jpg", desc:"" },
+    { title: "National Flag Pride Rally", img: "2018-1.jpg", desc: prideDesc },
     { title: "FANACT", img: "2018-2.jpg", desc:"" },
     { title: "Legal Awareness Seminar", img: "2018-3.jpg", desc:"" },
     { title: "AABAA", img: "2018-4.jpg", desc:"" },
@@ -204,7 +197,7 @@ const timeline = {
     { title: "Radio City 91.1 FM", img: "2018-8.jpg", desc:"" }
   ],
   2019: [
-    { title: "National Flag Pride Campaign", img: "2019-1.jpg", desc:"" },
+    { title: "National Flag Pride Campaign", img: "2019-1.jpg", desc: prideDesc },
     { title: "Legal Awareness Seminars", img: "2019-2.jpg", desc:"" },
     { title: "DIGI WOMANIA Seminar", img: "2019-3.jpg", desc:"" },
     { title: "P3 Pre Primary", img: "2019-4.jpg", desc:"" },
@@ -212,19 +205,19 @@ const timeline = {
     { title: "Medical camp", img: "2019-6.jpg", desc:"" }
   ],
   2020: [
-    { title: "National Flag Pride Campaign", img: "2020-1.jpg", desc:"" },
+    { title: "National Flag Pride Campaign", img: "2020-1.jpg", desc: prideDesc },
     { title: "Food, Water, Mask & Sanitizer Distribution", img: "2020-2.jpg", desc:"" },
     { title: "Medical camp", img: "2020-3.jpg", desc:"" },
     { title: "Sanitary pad distribution", img: "2020-4.jpg", desc:"" }
   ],
   2021: [
-    { title: "National Flag Pride Campaign", img: "2021-1.jpg", desc:"" },
+    { title: "National Flag Pride Campaign", img: "2021-1.jpg", desc: prideDesc },
     { title: "Food & Water Distribution, Masks, Sanitizers", img: "2021-2.jpg", desc:"" },
     { title: "Medical Aid under Project ASHA", img: "2021-3.jpg", desc:"" },
     { title: "Juhu beach cleaning", img: "2021-4.jpg", desc:"" }
   ],
   2022: [
-    { title: "National Flag Pride Campaign", img: "2022-1.jpg", desc:"" },
+    { title: "National Flag Pride Campaign", img: "2022-1.jpg", desc: prideDesc },
     { title: "Food & Water Distribution", img: "2022-2.jpg", desc:"" },
     { title: "Masks, Sanitizers, Stationary Kit Distribution", img: "2022-3.jpg", desc:"" },
     { title: "Sanitary pad distribution", img: "2022-4.jpg", desc:"" }
@@ -248,7 +241,6 @@ const timeline = {
   ]
 };
 
-/* Render year buttons (wrap) */
 const yearWrap = document.getElementById('yearWrap');
 Object.keys(timeline).forEach((y, idx) => {
   const btn = document.createElement('button');
@@ -261,11 +253,8 @@ Object.keys(timeline).forEach((y, idx) => {
   });
   yearWrap.appendChild(btn);
 });
-/* Active-first */
-const firstYear = Object.keys(timeline)[0];
 document.querySelectorAll('.year-btn')[0].classList.add('active');
 
-/* Render tiles */
 const tilesEl = document.getElementById('tiles');
 function renderTiles(year) {
   tilesEl.innerHTML = '';
@@ -273,29 +262,24 @@ function renderTiles(year) {
   items.forEach((it, i) => {
     const tile = document.createElement('div');
     tile.className = 'tile';
-    // poster
     const img = document.createElement('img');
     img.className = 'tile-poster';
     img.src = it.img;
     img.alt = it.title;
     img.onerror = () => { img.src = 'https://via.placeholder.com/300x450?text=No+Image'; };
-    // meta/title area
     const meta = document.createElement('div');
     meta.className = 'tile-meta';
     const title = document.createElement('div');
     title.className = 'tile-title';
     title.textContent = it.title;
     meta.appendChild(title);
-
     tile.appendChild(img);
     tile.appendChild(meta);
-
     tile.addEventListener('click', () => openModal(it));
     tilesEl.appendChild(tile);
   });
 }
 
-/* Modal logic - open/close and click-outside to close */
 const overlay = document.getElementById('overlay');
 const modalImg = document.getElementById('modal-img');
 const modalTitle = document.getElementById('modal-title');
@@ -311,7 +295,7 @@ function openModal(item) {
   overlay.setAttribute('aria-hidden','false');
   document.addEventListener('keydown', escHandler);
 }
-/* Close handler */
+
 function closeModal() {
   overlay.classList.remove('show');
   overlay.setAttribute('aria-hidden','true');
@@ -319,13 +303,9 @@ function closeModal() {
 }
 function escHandler(e) { if (e.key === 'Escape') closeModal(); }
 closeBtn.addEventListener('click', closeModal);
-/* Click outside modal to close */
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) closeModal();
-});
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 
-/* Init default year */
-renderTiles(firstYear);
+renderTiles(Object.keys(timeline)[0]);
 </script>
 </body>
 </html>
