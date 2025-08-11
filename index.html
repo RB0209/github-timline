@@ -160,7 +160,7 @@
 </div>
 
 <script>
-// Wrap JS so it only runs after DOM is ready and add guards to prevent runtime errors
+// Run after DOM ready
 document.addEventListener('DOMContentLoaded', function () {
   const prideDesc = `The National Flag Pride Rally – A Movement of Patriotism by CARE FOUNDATION
 In 2012, CARE FOUNDATION launched a powerful and heartfelt initiative – The National Flag Pride Rally, conceptualized by Chairman Mr. Aniket Ghanshyam Bhankal. Born out of a deep sense of patriotism and responsibility, this unique movement aimed to uphold the dignity of our beloved Tiranga throughout the year, especially on days of national significance like 26th January and 15th August.
@@ -170,6 +170,16 @@ The National Flag Pride Rally remains a shining example of how a small idea, roo
 Official Inauguration of CARE FOUNDATION – A Celebration of Inspiration and Empowerment
 Held on 14th August, 2012
 CARE FOUNDATION marked its official inauguration on 14th August, 2012, under the visionary leadership of Dr. Aniket Ghanshyam Bhankal and the dedicated members of the organization. This landmark event wasn’t just a beginning — it was a powerful statement of purpose.`;
+
+  const fanactDesc = `FANACT 2017 – A Stage for Young Voices, A Celebration of Expression
+2017 marked the grand debut of FANACT, a unique and heartwarming initiative by CARE FOUNDATION, aimed at nurturing acting talent among children while using performance as a powerful medium for social awareness. Conceptualized as FANACT – “Fantastic Actor”, the event invited children between the ages of 3 to 16 years to step onto the stage and express their thoughts on important social issues through the art of acting.
+The first edition saw an enthusiastic participation of nearly 80 students, and to everyone’s delight, even children as young as 5 years old delivered impactful performances that touched hearts and inspired minds. From thought-provoking skits to emotional monologues, every act carried a message — reflecting the event’s core belief that age is no barrier to awareness and expression.
+What made FANACT 2017 truly special was the extraordinary involvement of parents, who went above and beyond to prepare their children — helping with scripts, costumes, and rehearsals. The excitement among parents was palpable, as they watched their little ones use their voices to spark change and challenge perspectives in the audience.
+Adding to the charm, the adorable students of P3 Pre-Primary School performed beautifully choreographed dance acts as part of their Annual Function, bringing cheer and color to the stage.
+To recognize and encourage the budding talent, multiple prizes were awarded across age groups, celebrating not just performance, but passion and creativity. A new and thoughtful tradition also began this year — inviting young and emerging performers as Celebrity Guests, a decision driven by Mr. Aniket Ghanshyam Bhankal. His belief that children are inspired more by relatable, rising stars rather than established celebrities gave FANACT a unique, grounded appeal.
+The success of FANACT 2017 was the result of immense dedication, especially from Mrs. Bhavana Jain, whose unwavering efforts shaped the event into an inspiring and joyful celebration. The entire CARE FOUNDATION team and volunteers played a vital role in creating an atmosphere of warmth, support, and excitement — making the first FANACT not just an event, but a memorable milestone in the foundation’s journey of empowerment through expression.`;
+
+  const dansenDesc = `DANSEN, a vibrant dance-based initiative, used the power of movement and rhythm to raise awareness on social themes. Through group performances, flash mobs, and thematic dance acts, participants communicated messages of unity, gender equality, environmental care, and more — captivating audiences while spreading powerful ideas.`; 
 
   const timeline = {
     2011: [
@@ -203,13 +213,13 @@ CARE FOUNDATION marked its official inauguration on 14th August, 2012, under the
     ],
     2017: [
       { title: "National Flag Pride Rally", img: "2017-1.jpg", desc: prideDesc },
-      { title: "FANACT", img: "2017-2.jpg", desc:"" },
-      { title: "DANSEN", img: "2017-3.jpg", desc:"" },
+      { title: "FANACT", img: "2017-2.jpg", desc: fanactDesc },
+      { title: "DANSEN", img: "2017-3.jpg", desc: dansenDesc },
       { title: "P3 Pre Primary", img: "2017-4.jpg", desc:"" }
     ],
     2018: [
       { title: "National Flag Pride Rally", img: "2018-1.jpg", desc: prideDesc },
-      { title: "FANACT", img: "2018-2.jpg", desc:"" },
+      { title: "FANACT", img: "2018-2.jpg", desc: fanactDesc },
       { title: "Legal Awareness Seminar", img: "2018-3.jpg", desc:"" },
       { title: "AABAA", img: "2018-4.jpg", desc:"" },
       { title: "P3 Pre Primary", img: "2018-5.jpg", desc:"" },
